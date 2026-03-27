@@ -3,26 +3,29 @@
 import { useState, useEffect } from "react";
 
 export default function BetaBanner() {
-  const [mounted, setMounted] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    setMounted(true);
-    const stored = localStorage.getItem("cineforge-beta-dismissed");
-    if (stored === "true") setDismissed(true);
+    try {
+      if (localStorage.getItem("beta_banner_dismissed") === "true") {
+        setVisible(false);
+      }
+    } catch {}
   }, []);
 
   const handleDismiss = () => {
-    localStorage.setItem("cineforge-beta-dismissed", "true");
-    setDismissed(true);
+    try {
+      localStorage.setItem("beta_banner_dismissed", "true");
+    } catch {}
+    setVisible(false);
   };
 
-  // Don't render anything until mounted (avoids hydration mismatch)
-  // Once mounted, show unless dismissed
-  if (!mounted || dismissed) return null;
-
   return (
-    <div className="relative z-[10000] w-full bg-[#7B4FD4] py-2.5 px-4 text-center font-studio text-sm text-white tracking-widest uppercase">
+    <div
+      className="w-full bg-[#7B4FD4] py-2.5 px-4 text-center font-studio text-sm text-white tracking-widest uppercase"
+      style={{ display: visible ? "block" : "none" }}
+      suppressHydrationWarning
+    >
       <span>
         CINEFORGE AI IS FREE DURING BETA — Full access until May 1st. No
         credit card.

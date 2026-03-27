@@ -53,8 +53,8 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background text-on-surface min-h-screen">
+        <BetaBanner />
         <Providers>
-          <BetaBanner />
           <FilmGrain />
           {children}
           <CineBot />
