@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CineForge AI Production Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;family=Bebas+Neue&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#0A0A0F",
+              "surface": "#12101A",
+              "deep-surface": "#1E1530",
+              "primary": "#9D6FE8",
+              "primary-hover": "#B892F5",
+              "primary-mid": "#7B4FD4",
+              "primary-dark": "#4A2D8F",
+              "border-custom": "#2E1F5E",
+              "on-surface": "#F5F3FF",
+              "muted-text": "#A89EC4",
+              "outline-variant": "#4a4452",
+              "surface-container-low": "#1b1b20",
+              "outline": "#968e9e"
+            },
+            fontFamily: {
+              "headline": ["Bebas Neue"],
+              "body": ["DM Sans"],
+              "studio": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(157, 111, 232, 0.08);
+            border: 1px solid rgba(157, 111, 232, 0.25);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease-out;
+        }
+        .glass-card:hover {
+            border-color: rgba(184, 146, 245, 0.45);
+            box-shadow: inset 0 0 20px rgba(157, 111, 232, 0.15);
+        }
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDQH58DdyRGDX25miGF7Qj1fqWzYW2-FXOLacLipZfjylRJrqXhZGDvsZLnulhLobl0uQqDA5N5LNbBdGsU-HYt99uX5fL--EjCxLB4icJRfhEld62OAceSMObepGfOl96oCnbrI2MN3z7BrVnCxrhy1DFqwIyy2-h-Wz1b3rCo9Lox60iQ2aAH61vtiry-PZByJ6N2bf_53a6K-reOjC8OasmyPkLq1RTyBckjNNNvCnfkC2So7_BiJ05wuwG804C8TY2FmfGoBn0K);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+        .headline-tracking {
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary selection:text-white overflow-x-hidden">
+<div class="film-grain"></div>
+<!-- BETA BANNER -->
+<div class="w-full bg-primary-mid py-2 px-8 flex justify-center items-center text-white font-body font-medium text-xs uppercase tracking-widest z-[60] relative">
+<span class="flex-grow text-center">CINEFORGE AI IS FREE DURING BETA — Full access until April 1st. No credit card.</span>
+<button class="material-symbols-outlined text-sm hover:opacity-70 transition-opacity">close</button>
+</div>
+<!-- Top Navigation Shell -->
+<header class="sticky top-0 z-50 w-full h-20 px-8 flex justify-between items-center bg-[#131318]/80 backdrop-blur-2xl border-b border-border-custom shadow-[0_8px_30px_rgb(157,111,232,0.1)]">
+<div class="flex items-center gap-12">
+<div class="text-2xl font-black tracking-tighter text-primary italic font-studio">CINEFORGE AI</div>
+<nav class="hidden md:flex gap-8">
+<a class="font-body uppercase tracking-[0.05em] text-sm font-bold text-primary border-b-2 border-primary pb-1" href="#">Editor</a>
+<a class="font-body uppercase tracking-[0.05em] text-sm font-bold text-muted-text hover:text-on-surface transition-all duration-150 ease-out" href="#">Assets</a>
+<a class="font-body uppercase tracking-[0.05em] text-sm font-bold text-muted-text hover:text-on-surface transition-all duration-150 ease-out" href="#">Timeline</a>
+<a class="font-body uppercase tracking-[0.05em] text-sm font-bold text-muted-text hover:text-on-surface transition-all duration-150 ease-out" href="#">Render</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<input class="bg-surface border-border-custom focus:ring-1 focus:ring-primary text-sm w-64 h-10 px-4 font-body uppercase tracking-tighter text-on-surface" placeholder="Search Studio..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-muted-text text-lg">search</span>
+</div>
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-primary hover:bg-primary/10 transition-all p-2">smart_toy</button>
+<button class="material-symbols-outlined text-primary hover:bg-primary/10 transition-all p-2">notifications</button>
+<button class="material-symbols-outlined text-primary hover:bg-primary/10 transition-all p-2">account_circle</button>
+</div>
+</div>
+</header>
+<main class="relative">
+<!-- HERO SECTION -->
+<section class="relative h-[870px] w-full flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10"></div>
+<img alt="Cinematic gear" class="absolute inset-0 w-full h-full object-cover grayscale opacity-40 mix-blend-screen" data-alt="Close up of a professional cinema camera lens and film reels in a dark studio with dramatic purple neon highlights and lens flares" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4bp35mGBxW190kt749ppeQ0losnzz414hOKrkMuEZt4Epcz1aBVvs9k1wwb-Z5Zm0MG7lwy6h1-ojYoITtJgEhFIlRuS28gVam5DuhrQnUa2OsMeJ54kvWiy1ooVKNxUeV_JfuK8rBUfQxoCXu_JBygSFamgWdNeQ5TFq7fI5q74glsp5fQX3JQ8QloPXtPadhmATqeVSiw3LcDmOgemWUE9uZNQFAD3m8oEcWd3UyHzKxIbk_9EJFMB0ImEjuRmWfdyZFG1-avkS"/>
+<div class="absolute inset-0 bg-primary/10 mix-blend-overlay"></div>
+<div class="relative z-20 text-center px-4 max-w-5xl">
+<span class="font-body text-primary uppercase tracking-[0.4em] text-sm mb-4 block">Redefining Digital Cinema</span>
+<h1 class="font-headline text-8xl md:text-[10rem] text-on-surface leading-none headline-tracking mb-8">CINEFORGE AI</h1>
+<p class="font-headline text-3xl md:text-4xl text-muted-text max-w-3xl mx-auto mb-12 tracking-wider">WHERE AI FILMMAKERS ARE MADE</p>
+<div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+<button class="bg-primary text-white font-body font-bold uppercase tracking-widest text-lg px-12 py-5 hover:bg-primary-hover active:scale-95 transition-all shadow-[0_0_30px_rgba(157,111,232,0.4)]">
+                        Enter Studio
+                    </button>
+<button class="border border-border-custom bg-transparent text-primary font-body font-bold uppercase tracking-widest text-lg px-12 py-5 hover:bg-primary/5 transition-all">
+                        View Showreel
+                    </button>
+</div>
+</div>
+</section>
+<!-- TRUST STRIP -->
+<div class="w-full py-12 border-y border-border-custom bg-background">
+<div class="max-w-7xl mx-auto px-8 flex flex-col items-center justify-center text-center">
+<p class="text-muted-text font-body text-xs uppercase tracking-[0.2em] font-medium leading-relaxed">
+                    Built on the CODEx Cinematic System · Powered by AI Jedi Studios · <a class="underline hover:text-primary" href="https://linktr.ee/amenefee614">linktr.ee/amenefee614</a>
+</p>
+</div>
+</div>
+<!-- TOOLS BENTO GRID -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div>
+<h2 class="font-headline text-5xl text-on-surface headline-tracking">PRODUCTION TOOLS</h2>
+<p class="text-muted-text uppercase text-xs tracking-widest mt-2">Next-Gen Creative Accelerators</p>
+</div>
+<div class="h-[1px] flex-grow bg-border-custom mx-12 hidden md:block mb-4"></div>
+<button class="text-primary font-body text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-4 transition-all">
+                    Explore All <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Tool 1 -->
+<div class="glass-card p-12 flex flex-col h-[420px]">
+<div class="w-12 h-12 flex items-center justify-center bg-primary/20 text-primary mb-10">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<h3 class="font-headline text-base font-bold text-on-surface mb-6 uppercase tracking-wider">AI JEDI DS PROMPTER</h3>
+<p class="text-muted-text text-[13px] leading-relaxed mb-auto">Direct-to-screen prompting engine optimized for cinematic lighting and camera physics.</p>
+<div class="pt-8 border-t border-border-custom flex justify-between items-center">
+<span class="text-primary text-[10px] font-body uppercase tracking-widest">v4.2 Engine</span>
+<span class="material-symbols-outlined text-primary">north_east</span>
+</div>
+</div>
+<!-- Tool 2 -->
+<div class="glass-card p-12 flex flex-col h-[420px]">
+<div class="w-12 h-12 flex items-center justify-center bg-primary/20 text-primary mb-10">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">movie_edit</span>
+</div>
+<h3 class="font-headline text-base font-bold text-on-surface mb-6 uppercase tracking-wider">SCRIPT-TO-SHOT LIST</h3>
+<p class="text-muted-text text-[13px] leading-relaxed mb-auto">Automated storyboard generation from raw screenplay text. Scene-by-scene visual mapping.</p>
+<div class="pt-8 border-t border-border-custom flex justify-between items-center">
+<span class="text-primary text-[10px] font-body uppercase tracking-widest">Beta Access</span>
+<span class="material-symbols-outlined text-primary">north_east</span>
+</div>
+</div>
+<!-- Tool 3 -->
+<div class="glass-card p-12 flex flex-col h-[420px]">
+<div class="w-12 h-12 flex items-center justify-center bg-primary/20 text-primary mb-10">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">video_library</span>
+</div>
+<h3 class="font-headline text-base font-bold text-on-surface mb-6 uppercase tracking-wider">FILM LIBRARY</h3>
+<p class="text-muted-text text-[13px] leading-relaxed mb-auto">Global repository of AI-native assets, pre-graded sequences, and cinematic environments.</p>
+<div class="pt-8 border-t border-border-custom flex justify-between items-center">
+<span class="text-primary text-[10px] font-body uppercase tracking-widest">2.4 PB Vault</span>
+<span class="material-symbols-outlined text-primary">north_east</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FILM REEL BANNER -->
+<section class="w-full relative py-32 overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-r from-background via-primary/30 to-background z-10"></div>
+<img alt="Cinema banner" class="absolute inset-0 w-full h-full object-cover opacity-30 grayscale" data-alt="Abstract cinematic background with film grain, anamorphic lens flares, and dark purple light streaks on a black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY29SGhRwZxn1QShoaLocxKSPkmPvnNDAjoqrswWhLgp-j_372bDJXARVj9M0TGTOoctAIC5316kaohEb_5KFl-OHqilxsilYkchRBqh5Z4BV4oEE3zuuvjR0TC-LfvoCh16j-fEfsodePAgjx9lXBuqNrcQlJtjwtQ4CMwDw1ygly-zeq9vWt31Q0XRdOuu75g553YSAwVTeFQCO9Fqp41QKrHislyyo_P1Ict3WaibgZNMN8bKYbiDnvL6CdQGFa9CM672qqhU1t"/>
+<!-- Semi-transparent film reel graphic -->
+<div class="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-25 z-[15] pointer-events-none">
+<svg class="w-full h-full fill-primary animate-[spin_60s_linear_infinite]" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="10" stroke="currentColor" stroke-width="0.5"></circle>
+<circle cx="50" cy="18" fill="currentColor" r="6"></circle>
+<circle cx="50" cy="82" fill="currentColor" r="6"></circle>
+<circle cx="18" cy="50" fill="currentColor" r="6"></circle>
+<circle cx="82" cy="50" fill="currentColor" r="6"></circle>
+<circle cx="28" cy="28" fill="currentColor" r="6"></circle>
+<circle cx="72" cy="72" fill="currentColor" r="6"></circle>
+<circle cx="28" cy="72" fill="currentColor" r="6"></circle>
+<circle cx="72" cy="28" fill="currentColor" r="6"></circle>
+</svg>
+</div>
+<div class="relative z-20 text-center">
+<h2 class="font-headline text-8xl md:text-9xl text-on-surface headline-tracking opacity-90">FILM LIBRARY</h2>
+<p class="font-headline text-3xl text-primary tracking-[0.2em] mt-2">STREAM AI FILMS</p>
+<button class="mt-8 border-b-2 border-primary text-primary font-body text-sm uppercase tracking-widest pb-1 hover:text-on-surface hover:border-on-surface transition-all">Enter Screening Room</button>
+</div>
+</section>
+<!-- RECENT FILMS SECTION -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<div class="mb-16">
+<h2 class="font-headline text-5xl text-on-surface headline-tracking">RECENTLY ADDED FILMS</h2>
+<p class="text-muted-text uppercase text-xs tracking-widest mt-2">Latest Works from the Studio</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Film 1 -->
+<div class="group relative overflow-hidden h-[500px] border border-border-custom bg-surface">
+<img alt="Film 1" class="w-full h-full object-cover grayscale brightness-50 transition-transform duration-700 group-hover:scale-110" data-alt="Cinematic silhouette of a Black filmmaker behind a professional digital cinema camera, purple studio lighting, anamorphic lens flares, dark moody atmosphere, high contrast, 8k resolution, for a film poster card." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaEHBEq5wFhisARxNcYmS37zw6G7oY1HlKFUHRLx3GMUZNsbdMGUZPU2-yHcQWTRwis6xZgD3Rz9aFsu07_Tbkk2W7m8Nd0vS0LjJHTzVQRAc-NziC1J3qn3pIQ-U3xx7b-jhcWSyJ4b086ADEkVMhcLWepwbdFXKx9QgVSw4aM1Q1yeL05tQL5O4fHn4QfMWqs4A9z4fBsLm9GwdcPiNsi3rKGK6mQLKowbf4O3rlHtieNyMUjo0s9vptCIZGNq5xCUI_mNsDKwnw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-primary/10 to-transparent"></div>
+<div class="absolute inset-0 flex flex-col justify-end p-8">
+<span class="text-primary font-body text-[10px] uppercase tracking-widest mb-2">Sci-Fi / Experimental</span>
+<h4 class="font-headline text-4xl text-on-surface headline-tracking mb-4">NEON DUSK</h4>
+<div class="flex gap-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="bg-primary p-2 text-white material-symbols-outlined">play_arrow</button>
+<button class="border border-white/20 p-2 text-white material-symbols-outlined">add</button>
+</div>
+</div>
+</div>
+<!-- Film 2 -->
+<div class="group relative overflow-hidden h-[500px] border border-border-custom bg-surface">
+<img alt="Film 2" class="w-full h-full object-cover grayscale brightness-50 transition-transform duration-700 group-hover:scale-110" data-alt="A dark atmospheric scene with thick fog, deep shadows, and abstract purple light streaks piercing through the gloom, cinematic mood, 8k" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIy_f3ViTawoJtCKquv2ngg43U8yMxrzQzvO-fuNh3l3TMN4f4fHVYqpeAzrjl8crnEaZzmWsyGTCUm_7X_T-rPXoEznzf-bbf_ekipgjEK2ZwuzROkvBcf0ZFGkwTKGoK-xA2c4oOcG_BK6YEOwqtNpgERhpial-P45_4gGCxLc9HfI20kh-4Gty0avjiyykB8QxA5zTpDtPVwPoGyf2UxLR3bjjWrA6Ay4MA0CX7MnHAWlBPh4zY6wACGwoQtrclYIDk4bJpaRpG"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-primary/10 to-transparent"></div>
+<div class="absolute inset-0 flex flex-col justify-end p-8">
+<span class="text-primary font-body text-[10px] uppercase tracking-widest mb-2">Noir / Drama</span>
+<h4 class="font-headline text-4xl text-on-surface headline-tracking mb-4">THE VOID</h4>
+<div class="flex gap-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="bg-primary p-2 text-white material-symbols-outlined">play_arrow</button>
+<button class="border border-white/20 p-2 text-white material-symbols-outlined">add</button>
+</div>
+</div>
+</div>
+<!-- Film 3 -->
+<div class="group relative overflow-hidden h-[500px] border border-border-custom bg-surface">
+<img alt="Film 3" class="w-full h-full object-cover grayscale brightness-50 transition-transform duration-700 group-hover:scale-110" data-alt="Abstract geometric shapes in a dark foggy space with purple glowing edges and soft cinematic blur, high contrast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5FMBNzArGdm3BIk2GH3qlEf0aRhdDZ94lwseNydtf3aQ5Ztio6rp2DUYBd9qK_LdjzFCi7ZbnMy1sELUuo-l1NEZdxGYZgYBoBGi2WhAAoBnOQSRc1vpJsxmbBuVzNbR6x1WVawGMqsKq8hgkQm0cnSVF0agRmrdqtgHTehbbhW6Lp3Q2xVDVusJ5JTDztYwZ8vIj6lH4QvDac4kTdaEX025-Ahscd4y3uj8R-_bUvqw4NkMiU8hvhbzr6uHDe7xX-tNCqgAxbXIz"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-primary/10 to-transparent"></div>
+<div class="absolute inset-0 flex flex-col justify-end p-8">
+<span class="text-primary font-body text-[10px] uppercase tracking-widest mb-2">Documentary / Tech</span>
+<h4 class="font-headline text-4xl text-on-surface headline-tracking mb-4">KINETIC AI</h4>
+<div class="flex gap-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="bg-primary p-2 text-white material-symbols-outlined">play_arrow</button>
+<button class="border border-white/20 p-2 text-white material-symbols-outlined">add</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="bg-background border-t border-border-custom pt-24 pb-12 px-8">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+<div class="col-span-1 md:col-span-2">
+<div class="text-3xl font-black tracking-tighter text-primary italic font-studio mb-6">CINEFORGE AI</div>
+<p class="text-muted-text text-sm max-w-md leading-loose uppercase tracking-wide font-body">Empowering the world's most innovative directors through ethical AI and precision digital tools.</p>
+</div>
+<div>
+<h5 class="font-body font-bold text-xs uppercase tracking-[0.2em] text-on-surface mb-6">RESOURCES</h5>
+<ul class="space-y-4 text-muted-text text-xs font-body uppercase tracking-widest">
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Tutorials</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Reference</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-body font-bold text-xs uppercase tracking-[0.2em] text-on-surface mb-6">STUDIO</h5>
+<ul class="space-y-4 text-muted-text text-xs font-body uppercase tracking-widest">
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Showreel</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Press Kit</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-12 border-t border-border-custom flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-muted-text font-body text-[10px] uppercase tracking-widest">© 2024 CINEFORGE AI. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-8 text-muted-text font-body text-[10px] uppercase tracking-widest">
+<a class="hover:text-on-surface transition-colors" href="#">Privacy</a>
+<a class="hover:text-on-surface transition-colors" href="#">Terms</a>
+<a class="hover:text-on-surface transition-colors" href="#">Cookies</a>
+</div>
+</div>
+</footer>
+<!-- CINEBOT FAB -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center font-headline text-2xl shadow-[0_10px_40px_rgba(157,111,232,0.5)] z-[100] hover:scale-110 active:scale-90 transition-all">
+        CB
+    </button>
+</body></html>
