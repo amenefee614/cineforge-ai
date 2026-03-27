@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import GlassCard from "@/components/GlassCard";
 
 interface Stats {
+  devMode?: boolean;
   users: { total: number; free: number; pro: number; studio: number };
   cinebot: { today: number; week: number; month: number };
   recentUsers: {
@@ -26,22 +25,16 @@ interface Stats {
 }
 
 export default function AdminPage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-      return;
-    }
-
     fetch("/api/admin/stats")
       .then((res) => {
         if (res.status === 403) throw new Error("forbidden");
+        if (res.status === 401) throw new Error("unauthorized");
         if (!res.ok) throw new Error("failed");
         return res.json();
       })
@@ -52,12 +45,14 @@ export default function AdminPage() {
       .catch((err) => {
         if (err.message === "forbidden") {
           setError("Access denied. Admin only.");
+        } else if (err.message === "unauthorized") {
+          setError("Please log in to access the admin dashboard.");
         } else {
           setError("Failed to load admin data.");
         }
         setLoading(false);
       });
-  }, [status, router]);
+  }, []);
 
   const handleSubmission = async (id: string, action: "approve" | "reject") => {
     setActionLoading(id);
@@ -67,7 +62,6 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action }),
       });
-      // Refresh stats
       const res = await fetch("/api/admin/stats");
       const data = await res.json();
       setStats(data);
@@ -112,6 +106,23 @@ export default function AdminPage() {
 
   return (
     <div className="p-6 sm:p-8 max-w-6xl">
+      {/* Dev Mode Warning */}
+      {stats.devMode && (
+        <div className="mb-6 bg-yellow-500/10 border-2 border-yellow-500/40 p-4 flex items-center gap-3">
+          <span className="material-symbols-outlined text-yellow-400 text-2xl shrink-0">
+            warning
+          </span>
+          <div>
+            <p className="font-studio text-sm text-yellow-400 tracking-wider uppercase font-bold">
+              DEV MODE
+            </p>
+            <p className="font-body text-sm text-yellow-300/80 mt-0.5">
+              Set <code className="bg-yellow-500/20 px-1.5 py-0.5 text-yellow-300 font-mono text-xs">ADMIN_EMAIL</code> env var to protect this page in production.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="mb-8">
         <h1 className="font-headline text-4xl sm:text-5xl text-on-surface tracking-[0.05em] uppercase">
           ADMIN DASHBOARD

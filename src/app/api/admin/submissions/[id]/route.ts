@@ -9,14 +9,18 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const adminEmail = process.env.ADMIN_EMAIL;
-    if (!adminEmail || session.user.email !== adminEmail) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const devMode = !adminEmail;
+
+    // In production (ADMIN_EMAIL set): require auth + matching email
+    if (!devMode) {
+      const session = await getServerSession(authOptions);
+      if (!session?.user) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+      if (session.user.email !== adminEmail) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
     }
 
     const { action } = await req.json();
