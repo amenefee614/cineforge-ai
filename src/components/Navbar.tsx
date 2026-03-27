@@ -21,25 +21,25 @@ export default function Navbar() {
             href="/dashboard"
             className="font-body uppercase tracking-[0.05em] text-sm font-bold text-primary border-b-2 border-primary pb-1"
           >
-            Editor
+            Dashboard
           </Link>
           <Link
             href="/films"
             className="font-body uppercase tracking-[0.05em] text-sm font-bold text-muted-text hover:text-on-surface transition-all duration-150 ease-out"
           >
-            Assets
+            Films
           </Link>
           <Link
             href="/courses"
             className="font-body uppercase tracking-[0.05em] text-sm font-bold text-muted-text hover:text-on-surface transition-all duration-150 ease-out"
           >
-            Timeline
+            Courses
           </Link>
           <Link
             href="/community"
             className="font-body uppercase tracking-[0.05em] text-sm font-bold text-muted-text hover:text-on-surface transition-all duration-150 ease-out"
           >
-            Render
+            Community
           </Link>
         </nav>
       </div>
@@ -101,28 +101,28 @@ export default function Navbar() {
             className="block font-body text-sm text-muted-text hover:text-on-surface uppercase tracking-widest py-2"
             onClick={() => setMobileOpen(false)}
           >
-            Editor
+            Dashboard
           </Link>
           <Link
             href="/films"
             className="block font-body text-sm text-muted-text hover:text-on-surface uppercase tracking-widest py-2"
             onClick={() => setMobileOpen(false)}
           >
-            Assets
+            Films
           </Link>
           <Link
             href="/courses"
             className="block font-body text-sm text-muted-text hover:text-on-surface uppercase tracking-widest py-2"
             onClick={() => setMobileOpen(false)}
           >
-            Timeline
+            Courses
           </Link>
           <Link
             href="/community"
             className="block font-body text-sm text-muted-text hover:text-on-surface uppercase tracking-widest py-2"
             onClick={() => setMobileOpen(false)}
           >
-            Render
+            Community
           </Link>
           {session ? (
             <button
