@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "CineForge AI",
+        alt: "CineForge AI — Where AI Filmmakers Are Made",
       },
     ],
     type: "website",
@@ -46,12 +46,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-        />
-      </head>
+      <head />
+      {/* Material Symbols loaded via globals.css @import */}
       <body className="font-body antialiased bg-background text-on-surface min-h-screen">
         <BetaBanner />
         <Providers>

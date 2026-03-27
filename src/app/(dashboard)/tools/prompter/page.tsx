@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GlassCard from "@/components/GlassCard";
 
 const models = [
@@ -17,6 +17,45 @@ const shotSizes = ["Extreme Wide", "Wide", "Medium Wide", "Medium", "Medium Clos
 const cameraMovements = ["Static", "Pan Left", "Pan Right", "Tilt Up", "Tilt Down", "Dolly In", "Dolly Out", "Tracking", "Steadicam", "Handheld", "Crane Up", "Crane Down", "Orbit", "Whip Pan", "Rack Focus"];
 const lenses = ["12mm", "18mm", "24mm", "27mm", "35mm", "50mm", "85mm", "100mm Macro", "135mm", "200mm"];
 const apertures = ["f/1.2", "f/1.4", "f/1.8", "f/2.0", "f/2.8", "f/4.0", "f/5.6", "f/8.0", "f/11", "f/16"];
+
+interface StylePreset {
+  id: string;
+  name: string;
+  directorReference: string;
+  mood: string;
+  lightingNotes: string;
+  cameraNotes: string;
+  colorGrade: string;
+}
+
+const surpriseSubjects = [
+  "A lone astronaut floating above a shattered planet",
+  "A samurai standing in a field of glowing flowers at dusk",
+  "A child running through a rain-soaked neon city",
+  "An elderly woman painting on a cliff overlooking the ocean",
+  "A dancer spinning in an abandoned cathedral",
+  "A detective walking through fog-filled streets",
+  "A wolf howling on a snow-covered mountain peak",
+  "A musician playing piano in a burning room",
+  "A girl discovering a portal in an old bookshop",
+  "Two silhouettes embracing under northern lights",
+];
+const surpriseActions = [
+  "hair billowing in slow wind, fabric rippling with micro-physics",
+  "turning slowly toward camera, eyes catching light",
+  "walking forward with deliberate purpose, coat swaying",
+  "reaching out with trembling hand, dust particles floating",
+  "looking up in awe, tears catching prismatic light",
+  "running through shallow water, splashes frozen mid-air",
+];
+const surpriseScenes = [
+  "abandoned Tokyo subway station, bioluminescent moss growing on walls",
+  "vast desert with a single tree, golden hour, heat haze rising",
+  "underwater temple ruins, shafts of light piercing turquoise water",
+  "rooftop overlooking cyberpunk skyline, rain, holographic billboards",
+  "misty forest clearing, volumetric god rays, morning dew on leaves",
+  "brutalist concrete interior, single window, dust motes in beam of light",
+];
 
 export default function PrompterPage() {
   const [selectedModel, setSelectedModel] = useState("seedance-2.0");
@@ -35,6 +74,52 @@ export default function PrompterPage() {
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [styles, setStyles] = useState<StylePreset[]>([]);
+  const [selectedStyle, setSelectedStyle] = useState("");
+
+  // Fetch styles for preset dropdown
+  useEffect(() => {
+    fetch("/api/styles")
+      .then((res) => res.json())
+      .then((data) => setStyles(data.styles || []))
+      .catch(() => {});
+  }, []);
+
+  const applyStylePreset = (styleId: string) => {
+    setSelectedStyle(styleId);
+    if (!styleId) return;
+    const style = styles.find((s) => s.id === styleId);
+    if (style) {
+      setColorGrade(style.colorGrade);
+      setClientNotes(`Style: ${style.name} (${style.directorReference}). Mood: ${style.mood}. Lighting: ${style.lightingNotes}.`);
+      // Parse camera notes for camera movement
+      const camLower = style.cameraNotes.toLowerCase();
+      if (camLower.includes("tracking")) setCameraMovement("Tracking");
+      else if (camLower.includes("steadicam")) setCameraMovement("Steadicam");
+      else if (camLower.includes("handheld")) setCameraMovement("Handheld");
+      else if (camLower.includes("dolly")) setCameraMovement("Dolly In");
+      else if (camLower.includes("static")) setCameraMovement("Static");
+      else if (camLower.includes("orbit")) setCameraMovement("Orbit");
+      else if (camLower.includes("crane")) setCameraMovement("Crane Up");
+    }
+  };
+
+  const surpriseMe = () => {
+    const pick = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+    setSubject(pick(surpriseSubjects));
+    setAction(pick(surpriseActions));
+    setScene(pick(surpriseScenes));
+    setShotSize(pick(shotSizes));
+    setCameraMovement(pick(cameraMovements));
+    setLens(pick(lenses));
+    setAperture(pick(apertures));
+    setColorGrade(pick(["teal-orange cinematic", "desaturated cool tones", "warm golden hour", "high contrast noir", "pastel dreamlike", "neon-soaked cyberpunk"]));
+    setAudioTexture(pick(["distant thunder, lo-fi vinyl crackle", "ethereal choir hum, wind", "rain on glass, soft piano", "industrial ambient, metallic echo", "ocean waves, breathing"]));
+    setMultiShot(Math.random() > 0.7);
+    setImageToVideo(false);
+    // Auto-generate after filling
+    setTimeout(() => generate(false), 100);
+  };
 
   const generate = async (variations = false) => {
     if (!subject) return;
@@ -66,7 +151,7 @@ export default function PrompterPage() {
     setSubject(""); setAction(""); setScene(""); setShotSize("");
     setCameraMovement(""); setLens(""); setAperture(""); setColorGrade("");
     setAudioTexture(""); setMultiShot(false); setImageToVideo(false);
-    setClientNotes(""); setOutput("");
+    setClientNotes(""); setOutput(""); setSelectedStyle("");
   };
 
   const copyOutput = () => {
@@ -81,9 +166,19 @@ export default function PrompterPage() {
 
   return (
     <div className="p-6 sm:p-8">
-      <h1 className="font-headline text-4xl text-on-surface tracking-[0.05em] uppercase mb-2">
-        AI JEDI DS PROMPTER
-      </h1>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
+        <h1 className="font-headline text-4xl text-on-surface tracking-[0.05em] uppercase">
+          AI JEDI DS PROMPTER
+        </h1>
+        <button
+          onClick={surpriseMe}
+          disabled={loading}
+          className="flex items-center gap-2 bg-primary/20 text-primary border border-primary/30 px-4 py-2.5 font-studio text-xs tracking-widest uppercase hover:bg-primary/30 transition-colors disabled:opacity-50"
+        >
+          <span className="material-symbols-outlined text-sm">casino</span>
+          Surprise Me
+        </button>
+      </div>
       <p className="font-body text-sm text-muted-text mb-6">
         Generate CODEx-optimized cinematic prompts for any AI video model
       </p>
@@ -108,6 +203,34 @@ export default function PrompterPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
         {/* Input Form */}
         <div className="space-y-4">
+          {/* Style Preset */}
+          {styles.length > 0 && (
+            <GlassCard className="p-4">
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <label className={labelClass}>Style Preset</label>
+                  <select
+                    value={selectedStyle}
+                    onChange={(e) => applyStylePreset(e.target.value)}
+                    className={selectClass}
+                  >
+                    <option value="">No preset — manual input</option>
+                    {styles.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name} ({s.directorReference})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {selectedStyle && (
+                  <span className="mt-5 inline-block font-studio text-[10px] bg-primary/15 text-primary px-2 py-1 tracking-widest uppercase">
+                    Applied
+                  </span>
+                )}
+              </div>
+            </GlassCard>
+          )}
+
           <GlassCard className="p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
@@ -281,7 +404,7 @@ export default function PrompterPage() {
               disabled={loading || !subject}
               className="border border-border-custom text-muted-text px-6 py-3 font-studio text-sm tracking-widest uppercase hover:text-on-surface hover:border-primary/50 transition-all duration-150 disabled:opacity-50"
             >
-              Variations
+              3 Variations
             </button>
             <button
               onClick={clearAll}

@@ -1,8 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import ToolCard from "@/components/ToolCard";
 import GlassCard from "@/components/GlassCard";
+
+const BASE_URL = "https://cineforge-ai.up.railway.app";
 
 const tools = [
   {
@@ -52,6 +55,26 @@ const quickLinks = [
 
 export default function DashboardPage() {
   const { data: session } = useSession();
+  const [referralCode, setReferralCode] = useState("");
+  const [shareCopied, setShareCopied] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/account")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user?.referralCode) setReferralCode(data.user.referralCode);
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleShare = () => {
+    const link = referralCode
+      ? `${BASE_URL}/join?ref=${referralCode}`
+      : BASE_URL;
+    navigator.clipboard.writeText(link);
+    setShareCopied(true);
+    setTimeout(() => setShareCopied(false), 2000);
+  };
 
   return (
     <div className="p-6 sm:p-8 max-w-6xl">
@@ -99,24 +122,39 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Beta Status */}
-      <GlassCard className="p-6">
-        <div className="flex items-start gap-4">
-          <span className="material-symbols-outlined text-3xl text-primary">
-            info
-          </span>
-          <div>
-            <h3 className="font-headline text-xl text-on-surface tracking-[0.05em] uppercase mb-1">
-              BETA ACCESS
-            </h3>
-            <p className="font-body text-sm text-muted-text">
-              You have full Pro-level access to every tool, the complete film
-              library, all courses, and unlimited CineBot conversations during
-              the beta period. No credit card required until May 1st.
-            </p>
+      {/* Share + Beta Status */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6">
+        <GlassCard className="p-6">
+          <div className="flex items-start gap-4">
+            <span className="material-symbols-outlined text-3xl text-primary">
+              info
+            </span>
+            <div>
+              <h3 className="font-headline text-xl text-on-surface tracking-[0.05em] uppercase mb-1">
+                BETA ACCESS
+              </h3>
+              <p className="font-body text-sm text-muted-text">
+                You have full Pro-level access to every tool, the complete film
+                library, all courses, and unlimited CineBot conversations during
+                the beta period. No credit card required until May 1st.
+              </p>
+            </div>
           </div>
-        </div>
-      </GlassCard>
+        </GlassCard>
+
+        <GlassCard className="p-6 flex flex-col items-center justify-center text-center min-w-[200px]">
+          <span className="material-symbols-outlined text-3xl text-primary mb-2">share</span>
+          <button
+            onClick={handleShare}
+            className="bg-primary text-on-surface px-6 py-2.5 font-studio text-xs tracking-widest uppercase hover:bg-primary-hover transition-colors"
+          >
+            {shareCopied ? "Link Copied!" : "Share CineForge AI"}
+          </button>
+          <p className="font-body text-[10px] text-muted-text/60 mt-2">
+            Copies your referral link
+          </p>
+        </GlassCard>
+      </div>
     </div>
   );
 }

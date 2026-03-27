@@ -11,6 +11,8 @@ interface FilmCardProps {
   thumbnailUrl?: string | null;
   blurred?: boolean;
   linkPrefix?: string;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export default function FilmCard({
@@ -21,6 +23,8 @@ export default function FilmCard({
   description,
   blurred = false,
   linkPrefix = "/films/watch",
+  averageRating = 0,
+  reviewCount = 0,
 }: FilmCardProps) {
   const content = (
     <div
@@ -53,6 +57,27 @@ export default function FilmCard({
         <h3 className="font-headline text-lg text-on-surface tracking-[0.05em] uppercase mb-1">
           {title}
         </h3>
+        {/* Star Rating */}
+        {reviewCount > 0 && (
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  className={`material-symbols-outlined text-xs ${
+                    star <= Math.round(averageRating) ? "text-yellow-400" : "text-muted-text/20"
+                  }`}
+                  style={{ fontVariationSettings: star <= Math.round(averageRating) ? "'FILL' 1" : "'FILL' 0" }}
+                >
+                  star
+                </span>
+              ))}
+            </div>
+            <span className="font-studio text-[10px] text-muted-text tracking-wider">
+              {averageRating.toFixed(1)} ({reviewCount})
+            </span>
+          </div>
+        )}
         <p className="font-body text-sm text-muted-text line-clamp-2">
           {description}
         </p>

@@ -6,8 +6,33 @@ export async function GET() {
     const films = await prisma.film.findMany({
       where: { approved: true },
       orderBy: { createdAt: "desc" },
+      include: {
+        reviews: {
+          select: { rating: true },
+        },
+      },
     });
-    return NextResponse.json({ films });
+
+    const filmsWithRatings = films.map((film) => {
+      const avg =
+        film.reviews.length > 0
+          ? film.reviews.reduce((s, r) => s + r.rating, 0) / film.reviews.length
+          : 0;
+      return {
+        id: film.id,
+        title: film.title,
+        description: film.description,
+        genre: film.genre,
+        duration: film.duration,
+        thumbnailUrl: film.thumbnailUrl,
+        embedUrl: film.embedUrl,
+        featured: film.featured,
+        averageRating: avg,
+        reviewCount: film.reviews.length,
+      };
+    });
+
+    return NextResponse.json({ films: filmsWithRatings });
   } catch (error) {
     console.error("Films fetch error:", error);
     return NextResponse.json(

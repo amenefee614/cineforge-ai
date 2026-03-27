@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import GlassCard from "@/components/GlassCard";
 
 interface Post {
@@ -51,7 +51,7 @@ export default function CommunityPage() {
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
 
-  const fetchPosts = () => {
+  const fetchPosts = useCallback(() => {
     setLoading(true);
     fetch(`/api/community/posts?category=${category}&sort=${sort}`)
       .then((res) => res.json())
@@ -60,11 +60,11 @@ export default function CommunityPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  };
+  }, [category, sort]);
 
   useEffect(() => {
     fetchPosts();
-  }, [category, sort]);
+  }, [fetchPosts]);
 
   const createPost = async () => {
     if (!newTitle || !newBody) return;

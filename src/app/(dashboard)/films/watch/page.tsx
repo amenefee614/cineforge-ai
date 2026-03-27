@@ -10,6 +10,8 @@ interface Film {
   duration: string;
   description: string;
   thumbnailUrl: string | null;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 const genres = ["All", "Sci-Fi", "Noir/Drama", "Documentary/Tech", "Horror", "Action", "Experimental"];
@@ -82,6 +84,8 @@ export default function FilmWatchPage() {
               duration={film.duration}
               description={film.description}
               thumbnailUrl={film.thumbnailUrl}
+              averageRating={film.averageRating}
+              reviewCount={film.reviewCount}
             />
           ))}
         </div>

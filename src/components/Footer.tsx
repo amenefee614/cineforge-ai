@@ -14,6 +14,15 @@ export default function Footer() {
             Empowering the world&apos;s most innovative directors through
             ethical AI and precision digital tools.
           </p>
+          <a
+            href="https://linktr.ee/amenefee614"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-4 text-primary hover:text-primary-hover font-body text-xs uppercase tracking-widest transition-colors"
+          >
+            <span className="material-symbols-outlined text-sm">link</span>
+            linktr.ee/amenefee614
+          </a>
         </div>
         <div>
           <h5 className="font-body font-bold text-xs uppercase tracking-[0.2em] text-on-surface mb-6">
@@ -43,9 +52,9 @@ export default function Footer() {
           </h5>
           <ul className="space-y-4 text-muted-text text-xs font-body uppercase tracking-widest">
             <li>
-              <a href="#" className="hover:text-primary transition-colors">
-                Careers
-              </a>
+              <Link href="/press" className="hover:text-primary transition-colors">
+                Press
+              </Link>
             </li>
             <li>
               <Link href="/films" className="hover:text-primary transition-colors">
@@ -53,8 +62,13 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-primary transition-colors">
-                Press Kit
+              <a
+                href="https://linktr.ee/amenefee614"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors"
+              >
+                Linktree
               </a>
             </li>
           </ul>
@@ -66,6 +80,9 @@ export default function Footer() {
           &copy; 2026 CINEFORGE AI. ALL RIGHTS RESERVED.
         </p>
         <div className="flex gap-8 text-muted-text font-body text-[10px] uppercase tracking-widest">
+          <Link href="/press" className="hover:text-on-surface transition-colors">
+            Press
+          </Link>
           <a href="#" className="hover:text-on-surface transition-colors">
             Privacy
           </a>
@@ -74,6 +91,14 @@ export default function Footer() {
           </a>
           <a href="#" className="hover:text-on-surface transition-colors">
             Cookies
+          </a>
+          <a
+            href="https://linktr.ee/amenefee614"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-on-surface transition-colors"
+          >
+            Linktree
           </a>
         </div>
       </div>
