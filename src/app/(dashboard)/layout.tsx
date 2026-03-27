@@ -1,5 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Studio Dashboard — CineForge AI",
+  description: "Your AI filmmaking studio. Access production tools, film library, courses, and community.",
+  openGraph: { title: "Studio Dashboard — CineForge AI", description: "Your AI filmmaking studio.", images: ["/og-image.svg"] },
+};
 
 export default function DashboardLayout({
   children,

@@ -19,6 +19,7 @@ model User {
   toolUsages             ToolUsage[]
   filmViews              FilmView[]
   cinebotMessages        CinebotMessage[]
+  conversations          Conversation[]
   posts                  Post[]
   comments               Comment[]
   filmSubmissions        FilmSubmission[]
@@ -57,13 +58,25 @@ model FilmView {
   film     Film     @relation(fields: [filmId], references: [id])
 }
 
-model CinebotMessage {
-  id        String   @id @default(cuid())
+model Conversation {
+  id        String           @id @default(cuid())
   userId    String
-  role      String
-  content   String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  title     String           @default("New Chat")
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id])
+  messages  CinebotMessage[]
+}
+
+model CinebotMessage {
+  id             String        @id @default(cuid())
+  userId         String
+  role           String
+  content        String
+  conversationId String?
+  createdAt      DateTime      @default(now())
+  user           User          @relation(fields: [userId], references: [id])
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
 }
 
 model Post {

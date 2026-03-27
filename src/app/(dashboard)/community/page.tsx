@@ -14,7 +14,28 @@ interface Post {
   _count: { comments: number };
 }
 
-const categories = ["All", "General", "Tutorials", "Questions", "Showcase", "Feedback"];
+const categories = [
+  "All",
+  "General",
+  "Showcase",
+  "Feedback",
+  "Tutorials",
+  "Collab Wanted",
+];
+
+function AvatarInitials({ name, size = "sm" }: { name: string; size?: "sm" | "md" }) {
+  const initials = name
+    .split(/[\s@]+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() || "")
+    .join("");
+  const dim = size === "md" ? "w-9 h-9 text-sm" : "w-7 h-7 text-[10px]";
+  return (
+    <div className={`${dim} rounded-full bg-primary/20 text-primary flex items-center justify-center font-studio tracking-wider shrink-0`}>
+      {initials}
+    </div>
+  );
+}
 
 export default function CommunityPage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -54,7 +75,9 @@ export default function CommunityPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: newTitle, body: newBody, category: newCategory }),
       });
-      setNewTitle(""); setNewBody(""); setShowCreate(false);
+      setNewTitle("");
+      setNewBody("");
+      setShowCreate(false);
       fetchPosts();
     } catch {
       // handle error
@@ -97,7 +120,6 @@ export default function CommunityPage() {
         body: JSON.stringify({ body: newComment }),
       });
       setNewComment("");
-      // Refresh comments
       const res = await fetch(`/api/community/posts/${selectedPost.id}/comments`);
       const data = await res.json();
       setComments(data.comments || []);
@@ -126,47 +148,64 @@ export default function CommunityPage() {
         </button>
       </div>
 
-      {/* Create Post Form */}
+      {/* Create Post Modal */}
       {showCreate && (
-        <GlassCard className="p-6 mb-6">
-          <h3 className="font-headline text-xl text-on-surface tracking-[0.05em] uppercase mb-4">
-            CREATE POST
-          </h3>
-          <div className="space-y-3">
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="Post title..."
-              className="w-full bg-deep-surface text-on-surface font-body text-sm px-3 py-2.5 border border-border-custom/30 focus:border-primary/50 focus:outline-none"
-            />
-            <textarea
-              value={newBody}
-              onChange={(e) => setNewBody(e.target.value)}
-              placeholder="Share your thoughts..."
-              rows={4}
-              className="w-full bg-deep-surface text-on-surface font-body text-sm px-3 py-2.5 border border-border-custom/30 focus:border-primary/50 focus:outline-none resize-none"
-            />
-            <div className="flex items-center gap-3">
+        <div className="fixed inset-0 z-[10000] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface border border-border-custom/50 w-full max-w-lg p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-headline text-xl text-on-surface tracking-[0.05em] uppercase">
+                CREATE POST
+              </h3>
+              <button onClick={() => setShowCreate(false)} className="text-muted-text hover:text-on-surface">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder="Post title..."
+                className="w-full bg-deep-surface text-on-surface font-body text-sm px-3 py-2.5 border border-border-custom/30 focus:border-primary/50 focus:outline-none"
+              />
+              <textarea
+                value={newBody}
+                onChange={(e) => setNewBody(e.target.value)}
+                placeholder="Share your thoughts..."
+                rows={5}
+                className="w-full bg-deep-surface text-on-surface font-body text-sm px-3 py-2.5 border border-border-custom/30 focus:border-primary/50 focus:outline-none resize-none"
+              />
               <select
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
-                className="bg-deep-surface text-on-surface font-body text-sm px-3 py-2.5 border border-border-custom/30 focus:border-primary/50 focus:outline-none"
+                className="w-full bg-deep-surface text-on-surface font-body text-sm px-3 py-2.5 border border-border-custom/30 focus:border-primary/50 focus:outline-none"
               >
-                {categories.filter((c) => c !== "All").map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
+                {categories
+                  .filter((c) => c !== "All")
+                  .map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
               </select>
-              <button
-                onClick={createPost}
-                disabled={creating || !newTitle || !newBody}
-                className="bg-primary text-on-surface px-4 py-2.5 font-studio text-xs tracking-widest uppercase hover:bg-primary-hover transition-colors duration-150 disabled:opacity-50"
-              >
-                {creating ? "Posting..." : "Post"}
-              </button>
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowCreate(false)}
+                  className="flex-1 border border-border-custom text-muted-text py-2.5 font-studio text-xs tracking-widest uppercase hover:text-on-surface transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={createPost}
+                  disabled={creating || !newTitle || !newBody}
+                  className="flex-1 bg-primary text-on-surface py-2.5 font-studio text-xs tracking-widest uppercase hover:bg-primary-hover transition-colors disabled:opacity-50"
+                >
+                  {creating ? "Posting..." : "Post"}
+                </button>
+              </div>
             </div>
           </div>
-        </GlassCard>
+        </div>
       )}
 
       {/* Filters */}
@@ -191,8 +230,8 @@ export default function CommunityPage() {
           onChange={(e) => setSort(e.target.value)}
           className="bg-deep-surface text-muted-text font-studio text-xs px-3 py-1.5 border border-border-custom/20 focus:outline-none"
         >
-          <option value="recent">Most Recent</option>
-          <option value="popular">Most Popular</option>
+          <option value="recent">Latest</option>
+          <option value="popular">Most Upvoted</option>
         </select>
       </div>
 
@@ -201,16 +240,19 @@ export default function CommunityPage() {
         <div className="fixed inset-0 z-[10000] bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-surface border border-border-custom/50 w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6">
             <div className="flex justify-between items-start mb-4">
-              <div>
-                <span className="font-studio text-xs text-primary tracking-widest uppercase">
-                  {selectedPost.category}
-                </span>
-                <h2 className="font-headline text-2xl text-on-surface tracking-[0.05em] uppercase mt-1">
-                  {selectedPost.title}
-                </h2>
-                <p className="font-body text-xs text-muted-text mt-1">
-                  by {selectedPost.user.name || selectedPost.user.email}
-                </p>
+              <div className="flex items-start gap-3">
+                <AvatarInitials name={selectedPost.user.name || selectedPost.user.email} size="md" />
+                <div>
+                  <span className="font-studio text-xs text-primary tracking-widest uppercase">
+                    {selectedPost.category}
+                  </span>
+                  <h2 className="font-headline text-2xl text-on-surface tracking-[0.05em] uppercase mt-1">
+                    {selectedPost.title}
+                  </h2>
+                  <p className="font-body text-xs text-muted-text mt-1">
+                    by {selectedPost.user.name || selectedPost.user.email}
+                  </p>
+                </div>
               </div>
               <button
                 onClick={() => setSelectedPost(null)}
@@ -220,7 +262,7 @@ export default function CommunityPage() {
               </button>
             </div>
 
-            <p className="font-body text-sm text-on-surface mb-6 leading-relaxed">
+            <p className="font-body text-sm text-on-surface mb-6 leading-relaxed whitespace-pre-wrap">
               {selectedPost.body}
             </p>
 
@@ -232,14 +274,17 @@ export default function CommunityPage() {
                 {comments.map((c: any) => (
                   <div
                     key={c.id}
-                    className="bg-deep-surface p-3 border border-border-custom/15"
+                    className="bg-deep-surface p-3 border border-border-custom/15 flex gap-3"
                   >
-                    <p className="font-body text-sm text-on-surface">
-                      {c.body}
-                    </p>
-                    <p className="font-studio text-xs text-muted-text mt-1">
-                      {c.user?.name || c.user?.email}
-                    </p>
+                    <AvatarInitials name={c.user?.name || c.user?.email || "?"} />
+                    <div>
+                      <p className="font-body text-sm text-on-surface">
+                        {c.body}
+                      </p>
+                      <p className="font-studio text-xs text-muted-text mt-1">
+                        {c.user?.name || c.user?.email}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -270,7 +315,7 @@ export default function CommunityPage() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 bg-deep-surface animate-pulse" />
+            <div key={i} className="h-24 skeleton-shimmer border border-border-custom/20" />
           ))}
         </div>
       ) : posts.length > 0 ? (
@@ -296,6 +341,9 @@ export default function CommunityPage() {
                   </span>
                   <span className="font-studio text-xs">{post.upvotes}</span>
                 </button>
+
+                {/* Avatar */}
+                <AvatarInitials name={post.user.name || post.user.email} />
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">

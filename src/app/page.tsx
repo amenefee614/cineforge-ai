@@ -72,7 +72,7 @@ export default async function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section — matches Stitch design */}
-        <section className="relative h-[870px] w-full flex items-center justify-center overflow-hidden">
+        <section className="relative h-[870px] w-full flex items-center justify-center overflow-hidden film-noise">
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
           {/* Hero background image */}
@@ -154,7 +154,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {toolCards.map((tool) => (
               <Link key={tool.href} href={tool.href}>
-                <div className="glass-card p-12 flex flex-col h-[420px]">
+                <div className="glass-card tool-card-glow p-12 flex flex-col h-[420px]">
                   <div className="w-12 h-12 flex items-center justify-center bg-primary/20 text-primary mb-10">
                     <span
                       className="material-symbols-outlined"

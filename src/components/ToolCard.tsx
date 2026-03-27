@@ -12,7 +12,7 @@ interface ToolCardProps {
 export default function ToolCard({ href, icon, title, description }: ToolCardProps) {
   return (
     <Link href={href}>
-      <div className="group bg-[rgba(157,111,232,0.08)] border border-[rgba(157,111,232,0.25)] backdrop-blur-[12px] p-6 hover:bg-deep-surface hover:border-primary/40 transition-all duration-150 cursor-pointer h-full">
+      <div className="group bg-[rgba(157,111,232,0.08)] border border-[rgba(157,111,232,0.25)] backdrop-blur-[12px] p-6 hover:bg-deep-surface hover:border-primary/40 tool-card-glow transition-all duration-150 cursor-pointer h-full">
         <span className="material-symbols-outlined text-3xl text-primary mb-4 block group-hover:text-primary-hover transition-colors duration-150">
           {icon}
         </span>

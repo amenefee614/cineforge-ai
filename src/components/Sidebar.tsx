@@ -17,6 +17,7 @@ const navItems = [
   { href: "/community", label: "Community", icon: "forum" },
   { href: "/submit", label: "Submit Film", icon: "upload" },
   { href: "/dashboard/account", label: "Account", icon: "settings" },
+  { href: "/admin", label: "Admin", icon: "admin_panel_settings" },
 ];
 
 export default function Sidebar() {

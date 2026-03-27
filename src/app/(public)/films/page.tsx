@@ -3,6 +3,14 @@ import Footer from "@/components/Footer";
 import FilmCard from "@/components/FilmCard";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Film Library — CineForge AI",
+  description: "Browse AI-generated short films from creators worldwide. Stream the latest in AI filmmaking.",
+  openGraph: { title: "Film Library — CineForge AI", description: "Browse AI-generated short films.", images: ["/og-image.svg"] },
+  alternates: { canonical: "https://cineforge-ai.up.railway.app/films" },
+};
 
 async function getFilms() {
   try {

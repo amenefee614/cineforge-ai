@@ -2,6 +2,37 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GlassCard from "@/components/GlassCard";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pricing — CineForge AI",
+  description:
+    "Choose your CineForge AI plan. Free during beta with full Pro access. No credit card required until May 1st.",
+  openGraph: {
+    title: "Pricing — CineForge AI",
+    description: "Choose your CineForge AI plan. Free during beta.",
+    images: ["/og-image.png"],
+  },
+};
+
+const allFeatures = [
+  { name: "AI Prompts per day", free: "5", pro: "Unlimited", studio: "Unlimited" },
+  { name: "Film streaming", free: "3/month", pro: "Unlimited", studio: "Unlimited" },
+  { name: "Basic Shot List", free: true, pro: true, studio: true },
+  { name: "Advanced Production Tools", free: false, pro: true, studio: true },
+  { name: "Cinematography Style Library", free: false, pro: true, studio: true },
+  { name: "Character Bible Generator", free: false, pro: true, studio: true },
+  { name: "Podcast Dashboard", free: false, pro: true, studio: true },
+  { name: "CineBot Full Access", free: false, pro: true, studio: true },
+  { name: "Course Library", free: false, pro: true, studio: true },
+  { name: "Community Access", free: true, pro: true, studio: true },
+  { name: "Priority Support", free: false, pro: true, studio: true },
+  { name: "Team Collaboration", free: false, pro: false, studio: "5 seats" },
+  { name: "Custom Style Presets", free: false, pro: false, studio: true },
+  { name: "API Access", free: false, pro: false, studio: true },
+  { name: "White-label Exports", free: false, pro: false, studio: true },
+  { name: "1-on-1 Onboarding", free: false, pro: false, studio: true },
+];
 
 const tiers = [
   {
@@ -9,13 +40,6 @@ const tiers = [
     price: "$0",
     period: "/month",
     description: "Get started with AI filmmaking basics",
-    features: [
-      "5 prompts/day",
-      "3 film views/month",
-      "Basic shot list generator",
-      "Community access",
-      "CineBot (limited)",
-    ],
     cta: "Start Free",
     highlighted: false,
   },
@@ -24,17 +48,6 @@ const tiers = [
     price: "$19",
     period: "/month",
     description: "Full creative suite for serious filmmakers",
-    features: [
-      "Unlimited prompts",
-      "Unlimited film streaming",
-      "All production tools",
-      "Cinematography Style Library",
-      "Character Bible Generator",
-      "Podcast Dashboard",
-      "CineBot (full access)",
-      "Course library",
-      "Priority support",
-    ],
     cta: "Go Pro",
     highlighted: true,
   },
@@ -43,16 +56,6 @@ const tiers = [
     price: "$49",
     period: "/month",
     description: "For production teams and studios",
-    features: [
-      "Everything in Pro",
-      "Team collaboration (5 seats)",
-      "Custom style presets",
-      "API access",
-      "White-label exports",
-      "Dedicated CineBot persona",
-      "Priority film submissions",
-      "1-on-1 onboarding",
-    ],
     cta: "Contact Sales",
     highlighted: false,
   },
@@ -81,22 +84,25 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {/* Tier Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-20">
             {tiers.map((tier) => (
               <GlassCard
                 key={tier.name}
-                className={`p-8 flex flex-col ${
+                className={`p-8 flex flex-col relative ${
                   tier.highlighted
-                    ? "border-primary/50 shadow-[0_10px_40px_rgba(157,111,232,0.3)]"
+                    ? "border-2 border-[#9D6FE8] shadow-[0_10px_40px_rgba(157,111,232,0.3)]"
                     : ""
                 }`}
               >
                 {tier.highlighted && (
-                  <span className="font-studio text-xs text-primary tracking-widest uppercase mb-4">
-                    MOST POPULAR
-                  </span>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-primary text-on-surface font-studio text-[10px] tracking-widest uppercase px-4 py-1.5">
+                      MOST POPULAR
+                    </span>
+                  </div>
                 )}
-                <h3 className="font-headline text-3xl text-on-surface tracking-[0.05em] uppercase">
+                <h3 className="font-headline text-3xl text-on-surface tracking-[0.05em] uppercase mt-2">
                   {tier.name}
                 </h3>
                 <div className="flex items-baseline gap-1 mt-2 mb-2">
@@ -111,20 +117,6 @@ export default function PricingPage() {
                   {tier.description}
                 </p>
 
-                <ul className="space-y-3 mb-8 flex-1">
-                  {tier.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-start gap-2 font-body text-sm text-on-surface"
-                    >
-                      <span className="material-symbols-outlined text-primary text-[16px] mt-0.5">
-                        check
-                      </span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
                 <Link
                   href="/signup"
                   className={`block text-center py-3 font-studio text-sm tracking-widest uppercase transition-colors duration-150 ${
@@ -137,6 +129,67 @@ export default function PricingPage() {
                 </Link>
               </GlassCard>
             ))}
+          </div>
+
+          {/* Feature Comparison Table */}
+          <div className="max-w-5xl mx-auto">
+            <h2 className="font-headline text-3xl text-on-surface tracking-[0.05em] uppercase text-center mb-8">
+              FEATURE COMPARISON
+            </h2>
+            <GlassCard className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-border-custom/30">
+                    <th className="font-studio text-xs text-muted-text tracking-widest uppercase p-4 w-1/3">
+                      Feature
+                    </th>
+                    <th className="font-studio text-xs text-muted-text tracking-widest uppercase p-4 text-center">
+                      Free
+                    </th>
+                    <th className="font-studio text-xs text-primary tracking-widest uppercase p-4 text-center bg-primary/5">
+                      Pro
+                    </th>
+                    <th className="font-studio text-xs text-muted-text tracking-widest uppercase p-4 text-center">
+                      Studio
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allFeatures.map((feature, i) => (
+                    <tr
+                      key={feature.name}
+                      className={i < allFeatures.length - 1 ? "border-b border-border-custom/10" : ""}
+                    >
+                      <td className="font-body text-sm text-on-surface p-4">
+                        {feature.name}
+                      </td>
+                      {(["free", "pro", "studio"] as const).map((tier) => (
+                        <td
+                          key={tier}
+                          className={`p-4 text-center ${tier === "pro" ? "bg-primary/5" : ""}`}
+                        >
+                          {typeof feature[tier] === "boolean" ? (
+                            feature[tier] ? (
+                              <span className="material-symbols-outlined text-primary text-lg">
+                                check
+                              </span>
+                            ) : (
+                              <span className="material-symbols-outlined text-muted-text/30 text-lg">
+                                close
+                              </span>
+                            )
+                          ) : (
+                            <span className="font-studio text-xs text-on-surface tracking-wider">
+                              {feature[tier]}
+                            </span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </GlassCard>
           </div>
         </div>
       </main>
